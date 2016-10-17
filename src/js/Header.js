@@ -7,10 +7,7 @@ const Header = class extends Component {
     render () {
         return (
             <div>
-                <nav className="navbar navbar-light bg-faded">
-                    <IndexLink to="/" className="navbar-brand" href="#">Brand</IndexLink>
 
-                </nav>
             </div>
         );
     }

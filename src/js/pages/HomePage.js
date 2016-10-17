@@ -2,80 +2,93 @@ import React from 'react';
 import _ from 'lodash';
 
 module.exports = class extends React.Component {
-  constructor (props, context) {
-    super(props, context);
-    this.state = { route: 'login', isLoading: true };
-  }
+    constructor (props, context) {
+        super(props, context);
+        this.state = { route: 'login', isLoading: true };
+    }
 
-  componentDidMount () {
-    fetch('/api/' + (this.props.params.id || '0fa15f899a05c5d2f876'))
-      .then((res)=>res.json())
-      .then((res)=> {
-        this.setState(Object.assign({}, {
-          isLoading: false,
-        }, res));
-      })
-  }
+    componentDidMount () {
+        fetch('/api/' + (this.props.params.id || '0fa15f899a05c5d2f876'))
+            .then((res)=>res.json())
+            .then((res)=> {
+                this.setState(Object.assign({}, {
+                    isLoading: false,
+                    selectedRequest: res.folders[0].requests[0]
+                }, res));
+            })
+    }
 
-  renderRequest = (request) => {
-    return (
-      <div className="request">
-        <div className="container">
-          <span style={{ fontSize: 16, color: '#666' }}>
-        <span style={{
-          color: 'rgb(212, 140, 68)',
-          fontWeight: 'bold'
-        }}>{request.method}</span> {request.name}
-        </span>
-          <div className="alert">
-            {request.url}
-          </div>
-          <h4>BODY</h4>
-          <div className="alert">
-            <pre>{request.rawModeData}</pre>
-          </div>
-          <h4>Headers</h4>
-          <div className="alert">
-            <pre>{request.headers}</pre>
-          </div>
-          <h4>
-            Try it in browser
-          </h4>
-          <div className="alert">
-          <pre>
-          fetch("{request.url}",
-            {JSON.stringify({
-              headers: JSON.parse(request.headers),
-              method: request.method,
-              body: JSON.parse(request.body)
-            }, null, 2)}
-            )
-          </pre>
-          </div>
-        </div>
-      </div>
-    )
-  }
+    selectRequest = (selectedRequest) => this.setState({ selectedRequest })
 
-  render () {
-    var { folders } = this.state;
-
-    return this.state.isLoading ? (
-      <div className="centered-container">
-        Loading...
-      </div>
-    ) : (
-      <div style={{ marginTop: 20 }}>
-        {folders.map((folder) => (
-          <div className="collection">
-            <div className="container">
-              <h2>{folder.name}</h2>
-              <p>{folder.description}</p>
+    renderRequest = (request) => {
+        return (
+            <div onClick={()=>this.selectRequest(request)} className="request">
+                <div className="container">
+                    <div
+                        className={"card " + request.method.toLowerCase() + (this.state.selectedRequest == request ? ' active' : '')}>
+                        <span className="fg-primary">{request.method}</span> {request.name}
+                        <div className="notes">
+                            {request.url}
+                        </div>
+                    </div>
+                </div>
             </div>
-            {folder.requests.map(this.renderRequest)}
-          </div>
-        ))}
-      </div>
-    )
-  }
+        )
+    };
+
+    renderSelectedRequest = (request) => {
+        return request && (
+                <div>
+
+                    <div className="alert">
+                        <h3>Request</h3>
+                        <pre>
+                            fetch(<span style={{color:'#7231FF'}}>{request.url}</span>, {
+                            JSON.stringify({
+                                headers: JSON.parse(request.headers),
+                                method: request.method,
+                                body: JSON.parse(request.body)
+                            }, null, 1)
+                        });</pre>
+                    </div>
+                </div>
+            )
+    }
+
+    render () {
+        var { folders } = this.state;
+
+        return this.state.isLoading ? (
+            <div className="centered-container">
+                Loading...
+            </div>
+        ) : (
+            <div>
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-md-7">
+                            <h1>
+                                {this.state.name}
+                            </h1>
+                            <p className="lead">
+                                {this.state.description}
+                            </p>
+                            {folders.map((folder) => (
+                                <div id={folder.id} className="collection">
+                                    <div className="container">
+                                        <h2>{folder.name}</h2>
+                                        <p>{folder.description}</p>
+                                    </div>
+                                    {folder.requests.map(this.renderRequest)}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="col-md-5 console">
+                            {this.renderSelectedRequest(this.state.selectedRequest)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 };

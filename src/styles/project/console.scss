@@ -1,0 +1,12 @@
+.console {
+  background: $colour-console-bg;
+  color: $colour-console-fg;
+  font-family: "Courier New";
+  h1,h2,h3 {
+    color: darken($colour-console-fg, 10);
+    border-bottom: 1px solid darken($colour-console-bg, 10);
+  }
+  h4 {
+    color: $colour-brand;
+  }
+}

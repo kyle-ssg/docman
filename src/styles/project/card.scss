@@ -1,0 +1,28 @@
+.card {
+  background: $colour-card-bg;
+  cursor: pointer;
+  transition: all 200ms;
+  &.active, &.active:hover {
+    cursor: default;
+    background: darken($colour-card-bg, 15);
+    border-left: 4px solid darken($colour-brand, 15);
+  }
+  &:hover {
+    background: darken($colour-card-bg, 5);
+    border-left: 4px solid darken($colour-brand, 5);
+  }
+  border-left: 4px solid $colour-brand;
+  &.get {
+    border-left: 4px solid $colour-brand-secondary;
+  }
+  &.delete {
+    border-left: 4px solid $colour-brand-third;
+  }
+  margin-bottom: 20px;
+  padding: 10px;
+  font-weight: bold;
+  .notes {
+    font-weight: 200;
+    font-size: .8em;
+  }
+}

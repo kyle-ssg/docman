@@ -76,6 +76,7 @@ app.get('/api/:id', function (req, res) {
           method: request.method,
           description: request.description,
           name: request.name,
+          url: request.url,
           id: request.id
         };
 
