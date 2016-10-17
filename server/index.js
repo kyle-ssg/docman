@@ -2,6 +2,7 @@ import express from 'express';
 import exphbs from 'express-handlebars';
 import spm from './middleware/single-page-middleware';
 import https from 'https';
+import _ from 'lodash';
 
 import webpackMiddleware from './middleware/webpack-middleware';
 
@@ -53,7 +54,47 @@ app.get('/api/:id', function (req, res) {
 
     //the whole response has been recieved, so we just print it out here
     response.on('end', function () {
-      res.json(JSON.parse(str));
+
+      var collection = JSON.parse(str);
+
+      collection.requests = _.map(collection.requests, (request)=> {
+        var headers = request.headers.split(/\n/g);
+        var headersObj = {};
+
+        _.each(headers, function (header) {
+          var parts = header.split(':');
+          if (parts.length == 2) {
+            headersObj[parts[0]] = parts[1].trim(' ');
+          }
+        });
+
+        request.headers = JSON.stringify(headersObj, null, 2);
+
+        return {
+          headers: request.headers,
+          body: request.rawModeData,
+          method: request.method,
+          description: request.description,
+          name: request.name,
+          id: request.id
+        };
+
+      });
+
+
+      var requestsById = _.keyBy(collection.requests, 'id');
+
+      _.each(collection.folders, (coll)=>{
+        coll.requests = coll.order.map((id)=>requestsById[id]);
+        delete coll.order;
+      });
+
+
+      res.json({
+        name: collection.name,
+        description: collection.description,
+        folders: collection.folders
+      })
     });
   };
 
