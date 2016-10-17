@@ -4,10 +4,6 @@ import spm from './middleware/single-page-middleware';
 import https from 'https';
 
 import webpackMiddleware from './middleware/webpack-middleware';
-import DocumentTitle from 'react-document-title';
-import serverRouter from './server-router';
-import _ from 'lodash';
-import api from './api';
 
 console.log(process.env.NODE_ENV);
 
