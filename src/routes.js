@@ -11,7 +11,7 @@ import ClientServerPage from './js/pages/examples/ClientServerPage';
 module.exports = (
     <Route path="/" component={App}>
         <IndexRoute component={HomePage}/>
-        <Route path="client-server/:id" name="clientServer" component={ClientServerPage}/>
+        <Route path="/:id" component={HomePage}/>
         <Route path="*" component={NotFoundPage}/>
     </Route>
 );
