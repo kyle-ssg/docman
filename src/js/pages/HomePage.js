@@ -92,3 +92,11 @@ module.exports = class extends React.Component {
         )
     }
 };
+
+
+
+//Keep me alive plz
+var http = require("http");
+setInterval(function() {
+    http.get("https://dcmn.herokuapp.com/");
+}, 300000); // every 5 minutes (300000)
