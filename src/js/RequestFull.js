@@ -82,8 +82,6 @@ const TheComponent = class extends Component {
             response: ""
         });
 
-        debugger;
-
         fetch(this.state.url, {
             method,
             headers: JSON.parse(headers),
