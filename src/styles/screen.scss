@@ -42,10 +42,20 @@
   right: 650px;
 }
 
-.flex-row.fixed-bottom {
+.fixed-bottom {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 10px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.select-large {
+  min-width: 200px;
+  float:right;
+  font-size: 24px;
 }

@@ -26,12 +26,26 @@ module.exports = class extends React.Component {
         }
     }
 
+    generateURL = (url) => {
+        if (this.state.environment) {
+            return url.replace(this.state.environments[0].url, this.state.environment.url);
+        }
+        return url
+    };
+
     selectRequest = (selectedRequest) => {
         this.setState({ selectedRequest });
     }
 
+    setEnvironment = (e) => {
+        this.setState({
+            environment: this.state.environments[parseInt(e.currentTarget.value)]
+        })
+    };
+
+
     render () {
-        var { folders, name, isLoading, description, selectedRequest } = this.state;
+        var { folders, name, isLoading, environments, description, selectedRequest } = this.state;
         return (
             <div>
                 <div className="left">
@@ -39,7 +53,15 @@ module.exports = class extends React.Component {
                         <div>
                             <h1>
                                 {name}
+                                {environments &&
+                                <select className="select-large" onChange={this.setEnvironment}>
+                                    {environments.map((en, i)=>(
+                                        <option value={i}>{en.name}</option>
+                                    ))}
+                                </select>
+                                }
                             </h1>
+
                             <p className="lead">
                                 {description}
                             </p>
@@ -51,8 +73,10 @@ module.exports = class extends React.Component {
                                     </div>
                                     {folder.requests.map((request)=>
                                         <RequestSummary
+                                            key={request.url}
+                                            generateURL={this.generateURL}
                                             onClick={this.selectRequest}
-                                            request={request}
+                                            request={Object.assign({}, request, { url: this.generateURL(request.url) })}
                                             isActive={selectedRequest == request}/>
                                     )}
                                 </div>
@@ -62,7 +86,8 @@ module.exports = class extends React.Component {
                 </div>
                 <div className="right console">
                     {selectedRequest && (
-                        <RequestFull request={selectedRequest}/>
+                        <RequestFull
+                            request={Object.assign({}, selectedRequest, { url: this.generateURL(selectedRequest.url) })}/>
                     )}
                 </div>
             </div>

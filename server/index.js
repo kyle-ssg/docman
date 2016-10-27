@@ -69,7 +69,6 @@ app.get('/api/:id', function (req, res) {
         });
 
         request.headers = JSON.stringify(headersObj, null, 2);
-
         return {
           headers: request.headers,
           body: request.rawModeData,
@@ -90,13 +89,24 @@ app.get('/api/:id', function (req, res) {
         delete coll.order;
       });
 
-      var x = {
-        x: "bla"
-      }
+      var environments = collection.description.match(/\[ENVIRONMENTS.*?\]/);
+      var description = collection.description.replace(/\[ENVIRONMENTS.*?\]/,"");
+
+        if (environments) {
+            environments = environments[0].replace('[ENVIRONMENTS=',"").replace("]","").split(',').map((i)=>{
+                var parts = i.split('-');
+                return {
+                    name:parts[0],
+                    url:parts[1]
+                }
+            });
+        }
+      console.log(collection.description);
 
       res.json({
         name: collection.name,
-        description: collection.description,
+        description,
+        environments,
         folders: collection.folders
       })
     });

@@ -2,14 +2,17 @@
  * Created by kylejohnson on 30/07/2016.
  */
 import React from 'react'
+import _ from 'lodash';
 const Tabs = class extends React.Component {
-    displayName:'Tabs'
+    displayName: 'Tabs'
 
     render () {
+        var children = _.filter(this.props.children, (i)=>i);
         return (
             <div className="tabs">
                 <div className="tabs-nav">
-                    {this.props.children.map((child, i)=> {
+                    {children && children.map((child, i)=> {
+                        if (!child) return null;
                         var isSelected = this.props.value == i;
                         return (
                             <button
@@ -22,11 +25,11 @@ const Tabs = class extends React.Component {
                     })}
                 </div>
                 <div className="tab-line" style={{
-                    width: 100 / this.props.children.length + "%",
-                    left: 100 / this.props.children.length * this.props.value + "%"
+                    width: 100 / children.length + "%",
+                    left: 100 / children.length * this.props.value + "%"
                 }}/>
                 <div className="tabs-content">
-                    {this.props.children.map((child, i)=> {
+                    {children.map((child, i)=> {
                         var isSelected = this.props.value == i;
                         return (
                             <div key={'content' + i} className={'tab-item' + (isSelected ? ' tab-active' : '')}>
