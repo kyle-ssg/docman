@@ -17,7 +17,35 @@
 @import "project/buttons";
 @import "project/card";
 @import "project/console";
+@import "project/tabs";
 @import "project/nav";
+@import "flexbox/index";
+
 
 // other
 @import "project/custom";
+
+
+.right {
+  position: fixed;
+  right: 0;
+  width: 650px;
+  bottom: 0;
+  top: 0;
+  padding: 10px;
+}
+
+.left {
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  right: 650px;
+}
+
+.flex-row.fixed-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+}

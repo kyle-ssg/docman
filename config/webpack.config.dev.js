@@ -4,7 +4,7 @@ var src = path.join(__dirname, '../src') + '/';
 var webpack = require('webpack');
 
 module.exports = {
-    devtool: 'eval',
+    devtool: 'source-map',
     entry: [
         'webpack-hot-middleware/client',
         'react-hot-loader/patch',

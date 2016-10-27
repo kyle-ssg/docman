@@ -1,12 +1,48 @@
 .console {
+  .tabs {
+    button, button:active {
+      outline: none;
+      background: transparent;
+      border: none;
+      color: $colour-console-fg;
+    }
+  }
   background: $colour-console-bg;
   color: $colour-console-fg;
   font-family: "Courier New";
   h1,h2,h3 {
-    color: darken($colour-console-fg, 10);
-    border-bottom: 1px solid darken($colour-console-bg, 10);
+    color: #eae7e7;
+    font-weight: 200;
+    border-bottom: 1px solid #8c8c8c;
   }
   h4 {
     color: $colour-brand;
+  }
+
+  input {
+    background: transparent;
+    border: 2px solid $colour-brand;
+    outline: none;
+    color: $colour-console-fg;
+    height: 44px;
+    padding: 5px;
+    width: 100%;
+  }
+
+  .cm-s-base16-dark.CodeMirror {
+    .CodeMirror-code {
+      background: #272c3e;
+    }
+    height: 400px;
+    background: transparent;
+    .CodeMirror-gutters {
+      background: transparent;
+    }
+    span.cm-string {
+      color: #59acff;
+    }
+    span.cm-property {
+      color: #a6e22e;
+    }
   }
 }

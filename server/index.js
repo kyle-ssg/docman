@@ -90,6 +90,9 @@ app.get('/api/:id', function (req, res) {
         delete coll.order;
       });
 
+      var x = {
+        x: "bla"
+      }
 
       res.json({
         name: collection.name,

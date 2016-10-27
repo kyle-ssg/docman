@@ -1,0 +1,40 @@
+
+.tabs-nav {
+  display: flex;
+  flex-direction: row;
+  button {
+    flex:1;
+    min-height:44px;
+    &.active {
+      font-weight: 500;
+    }
+  }
+}
+
+.tab-line {
+  bottom: 0px;
+  display: block;
+  height: 2px;
+  margin-top: -2px;
+  position: relative;
+  transition: left 1s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  background-color: $colour-brand;
+}
+
+.btn-tab {
+  color: transparent;
+  &.tab-active {
+  }
+}
+
+.tab-item {
+  display: none;
+  padding-top: $input-padding-y;
+  &.tab-active {
+    display: block;
+  }
+}
+.tab-icon {
+  font-size: 1.4em;
+  display: block;
+}
