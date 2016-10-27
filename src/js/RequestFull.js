@@ -51,14 +51,12 @@ const TheComponent = class extends Component {
 
             if (this.headersEditor) {
                 this.headersEditor.refresh();
-                this.headersEditor.setValue(this.state.headersString);
             } else {
                 if (this.refs.headers) {
-                    this.headersEditor = CodeMirror.fromTextArea(this.refs.headers, config);
+                    this.headersEditor = CodeMirror.fromTextArea(this.refs.headers, config)
                 }
             }
             if (this.editor) {
-                this.editor.setValue(this.state.bodyString);
                 this.editor.refresh();
             } else {
                 if (this.refs.body) {
@@ -75,16 +73,21 @@ const TheComponent = class extends Component {
         e.preventDefault();
         var { method } = this.props.request;
 
+        var body = this.editor ? this.editor.getValue() : this.state.bodyString;
+        var headers = this.headersEditor ? this.headersEditor.getValue() : this.state.headersString;
+
         this.setState({
             isLoading: true,
             error: "",
             response: ""
         });
 
+        debugger;
+
         fetch(this.state.url, {
             method,
-            headers: JSON.parse(this.state.headersString),
-            body: method == "GET" ? null : this.state.bodyString
+            headers: JSON.parse(headers),
+            body: method == "GET" ? null : body
         }).then((response)=> {
 
             if (response.status >= 200 && response.status < 300) {
@@ -101,8 +104,6 @@ const TheComponent = class extends Component {
 
     componentWillReceiveProps (newProps) {
         if (newProps.request !== this.props.request) {
-            var bodyString = newProps.request.body;
-            this.editor.getDoc().setValue(bodyString);
             this.setState({
                 error: "",
                 response: "",
@@ -111,7 +112,7 @@ const TheComponent = class extends Component {
                 headersString: newProps.request && newProps.request.headers,
                 url: newProps.request && newProps.request.url,
                 isLoading: false
-            })
+            }, this.resetEditors);
         }
     }
 
@@ -123,16 +124,16 @@ const TheComponent = class extends Component {
                 <div className="alert">
                     <h3>Request</h3>
                     <Tabs value={this.state.tab} onChange={this.selectTab}>
-                        <div tabLabel={"Headers"}>
-                            <textarea value={this.state.headersString} ref="headers"
-                                      onChange={(e)=>this.setState({ headersString: e.currentTarget.value })}/>
-                        </div>
+
                         { method !== "GET" && (
                             <div tabLabel={"Body"}>
-                                <textarea value={this.state.bodyString} ref="body"
-                                          onChange={(e)=>this.setState({ bodyString: e.currentTarget.value })}/>
+                                <textarea value={this.state.bodyString} ref="body"/>
                             </div>
                         )}
+
+                        <div tabLabel={"Headers"}>
+                            <textarea value={this.state.headersString} ref="headers"/>
+                        </div>
 
                     </Tabs>
 
