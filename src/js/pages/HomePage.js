@@ -63,7 +63,8 @@ module.exports = class extends React.Component {
                             </h1>
 
                             <p className="lead">
-                                {description}
+                                {description} <a target="_blank"
+                                                 href={"https://www.getpostman.com/collections/" + this.props.params.id}>Download</a>
                             </p>
                             {folders && folders.map((folder) => (
                                 <div id={folder.id} className="collection">
