@@ -147,6 +147,12 @@ const TheComponent = class extends Component {
                                 <JSONText value={this.state.error}/>
                             </div>
                         )}
+                        {this.state.response && (
+                            <div className="error">
+                                <h2>Response</h2>
+                                <JSONText value={this.state.response}/>
+                            </div>
+                        )}
                         <form onSubmit={this.sendRequest} className="flex-row">
                             <div className="flex-column">
                                 {method}
