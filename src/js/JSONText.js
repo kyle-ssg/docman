@@ -31,8 +31,8 @@ const TheComponent = class extends Component {
         var value = this.props.value;
         try {
             JSON.parse(this.props.value)
-            value = JSON.parse(this.props.value);
-            value = JSON.stringify(value, null, 2);
+            value = this.props.value && JSON.parse(this.props.value);
+            value = value && JSON.stringify(value, null, 2);
         } catch (e) {}
 
         return (

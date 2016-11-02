@@ -10,7 +10,7 @@ const TheComponent = class extends Component {
     render () {
         var { method, name, url, body } = this.props.request;
         var { isActive } = this.props;
-        body = JSON.parse(body);
+        body = body && JSON.parse(body);
         console.log(body)
         return (
             <div onClick={this.selectRequest} className="request">
