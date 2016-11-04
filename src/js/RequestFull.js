@@ -137,26 +137,26 @@ const TheComponent = class extends Component {
 
                     </Tabs>
 
-
-                    {this.state.error && (
-                        <div className="error">
-                            <h2>Error - {duration}</h2>
-                            <JSONText value={this.state.error}/>
-                        </div>
-                    )}
-                    {this.state.response && (
-                        <div className="error">
-                            <h2>Response - {duration}</h2>
-                            <JSONText value={this.state.response}/>
-                        </div>
-                    )}
-
                     <div className="fixed-bottom">
                         {this.state.isLoading && (
                             <div className="text-center">
                                 <div>Loading...</div>
                             </div>
                         )}
+
+                        {this.state.error && (
+                            <div className="error">
+                                <h2>Error - {duration}</h2>
+                                <JSONText value={this.state.error}/>
+                            </div>
+                        )}
+                        {this.state.response && (
+                            <div className="error">
+                                <h2>Response - {duration}</h2>
+                                <JSONText value={this.state.response}/>
+                            </div>
+                        )}
+
                         <form onSubmit={this.sendRequest} className="flex-row">
                             <div className="flex-column">
                                 {method}
