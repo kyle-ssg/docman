@@ -79,7 +79,8 @@ const TheComponent = class extends Component {
         this.setState({
             isLoading: true,
             error: "",
-            response: ""
+            response: "",
+            startTime: new Date()
         });
 
         fetch(this.state.url, {
@@ -89,13 +90,13 @@ const TheComponent = class extends Component {
         }).then((response)=> {
 
             if (response.status >= 200 && response.status < 300) {
-                response.text().then((text)=>this.setState({ error: "", response: text, isLoading: false }))
+                response.text().then((text)=>this.setState({ endTime: new Date(), error: "", response: text, isLoading: false }))
             } else {
-                response.text().then((text)=>this.setState({ error: text && text.trim(/\n/), isLoading: false }))
+                response.text().then((text)=>this.setState({ endTime: new Date(),error: text && text.trim(/\n/), isLoading: false }))
             }
         }).catch(()=> {
             res.json().then((result)=> {
-                this.setState({ result })
+                this.setState({ endTime: new Date(), result })
             })
         })
     };
@@ -117,6 +118,7 @@ const TheComponent = class extends Component {
 
     render () {
         var { headers, method, body, url } = this.props.request;
+        var duration = this.state.startTime && this.state.endTime && this.state.endTime.valueOf() - this.state.startTime.valueOf() + 'ms';
         return (
             <div>
                 <div className="alert">
@@ -135,22 +137,24 @@ const TheComponent = class extends Component {
 
                     </Tabs>
 
+
+                    {this.state.error && (
+                        <div className="error">
+                            <h2>Error - {duration}</h2>
+                            <JSONText value={this.state.error}/>
+                        </div>
+                    )}
+                    {this.state.response && (
+                        <div className="error">
+                            <h2>Response - {duration}</h2>
+                            <JSONText value={this.state.response}/>
+                        </div>
+                    )}
+
                     <div className="fixed-bottom">
                         {this.state.isLoading && (
                             <div className="text-center">
                                 <div>Loading...</div>
-                            </div>
-                        )}
-                        {this.state.error && (
-                            <div className="error">
-                                <h2>Error</h2>
-                                <JSONText value={this.state.error}/>
-                            </div>
-                        )}
-                        {this.state.response && (
-                            <div className="error">
-                                <h2>Response</h2>
-                                <JSONText value={this.state.response}/>
                             </div>
                         )}
                         <form onSubmit={this.sendRequest} className="flex-row">
