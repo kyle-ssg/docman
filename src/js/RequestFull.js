@@ -50,6 +50,7 @@ const TheComponent = class extends Component {
         _.defer(()=> {
 
             if (this.headersEditor) {
+                this.editor.setValue(this.state.headersString)
                 this.headersEditor.refresh();
             } else {
                 if (this.refs.headers) {
@@ -57,6 +58,7 @@ const TheComponent = class extends Component {
                 }
             }
             if (this.editor) {
+                this.editor.setValue(this.state.bodyString)
                 this.editor.refresh();
             } else {
                 if (this.refs.body) {

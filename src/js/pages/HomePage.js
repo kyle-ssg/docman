@@ -74,7 +74,6 @@ module.exports = class extends React.Component {
                                     </div>
                                     {folder.requests.map((request)=>
                                         <RequestSummary
-                                            key={request.url+request.method}
                                             generateURL={this.generateURL}
                                             onClick={this.selectRequest}
                                             request={Object.assign({}, request, { url: this.generateURL(request.url) })}
