@@ -93,7 +93,7 @@ app.get('/api/:id', function (req, res) {
       var environments = collection.description.match(/\[ENVIRONMENTS.*?\]/);
       var description = collection.description.replace(/\[ENVIRONMENTS.*?\]/,"");
       var requiresAuth = collection.description.indexOf('[HTTP_AUTH]') !== -1;
-      description = description.replace('[HTTP_AUTH]');
+      description = description.replace('[HTTP_AUTH]', "");
 
         if (environments) {
             environments = environments[0].replace('[ENVIRONMENTS=',"").replace("]","").split(',').map((i)=>{
