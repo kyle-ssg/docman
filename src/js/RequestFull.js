@@ -87,19 +87,26 @@ const TheComponent = class extends Component {
 
         fetch(this.state.url, {
             method,
-            headers: JSON.parse(headers),
+            headers: this.props.token ? Object.assign(JSON.parse(headers), { authorization: 'Basic ' + this.props.token }) : JSON.parse(headers),
             body: method == "GET" ? null : body
         }).then((response)=> {
 
             if (response.status >= 200 && response.status < 300) {
-                response.text().then((text)=>this.setState({ endTime: new Date(), error: "", response: text, isLoading: false }))
+                response.text().then((text)=>this.setState({
+                    endTime: new Date(),
+                    error: "",
+                    response: text,
+                    isLoading: false
+                }))
             } else {
-                response.text().then((text)=>this.setState({ endTime: new Date(),error: text && text.trim(/\n/), isLoading: false }))
+                response.text().then((text)=>this.setState({
+                    endTime: new Date(),
+                    error: text && text.trim(/\n/),
+                    isLoading: false
+                }))
             }
-        }).catch(()=> {
-            res.json().then((result)=> {
-                this.setState({ endTime: new Date(), result })
-            })
+        }).catch((result)=> {
+            this.setState({ isLoading: false, endTime: new Date(), result: result || 'Unauthorized' })
         })
     };
 

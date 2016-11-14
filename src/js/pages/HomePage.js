@@ -43,9 +43,8 @@ module.exports = class extends React.Component {
         })
     };
 
-
     render () {
-        var { folders, name, isLoading, environments, description, selectedRequest } = this.state;
+        var { requiresAuth, folders, name, isLoading, environments, description, selectedRequest } = this.state;
         return (
             <div>
                 <div className="left">
@@ -62,10 +61,19 @@ module.exports = class extends React.Component {
                                 }
                             </h1>
 
+
                             <p className="lead">
                                 {description} <a target="_blank"
                                                  href={"https://www.getpostman.com/collections/" + this.props.params.id}>Download</a>
                             </p>
+                            {requiresAuth && (
+                                <div>
+                                    <h3>
+                                        This API Requires authentication, please enter a Bearer token here
+                                    </h3>
+                                    <input onChange={(e)=>this.setState({token:e.currentTarget.value})} type="text" placeholder="Token"/>
+                                </div>
+                            )}
                             {folders && folders.map((folder) => (
                                 <div id={folder.id} className="collection">
                                     <div className="container">
@@ -87,6 +95,7 @@ module.exports = class extends React.Component {
                 <div className="right console">
                     {selectedRequest && (
                         <RequestFull
+                            token={this.state.token}
                             request={Object.assign({}, selectedRequest, { url: this.generateURL(selectedRequest.url) })}/>
                     )}
                 </div>

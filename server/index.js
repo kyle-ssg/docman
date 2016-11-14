@@ -2,6 +2,7 @@ import express from 'express';
 import exphbs from 'express-handlebars';
 import spm from './middleware/single-page-middleware';
 import https from 'https';
+import req from 'request';
 import _ from 'lodash';
 
 import webpackMiddleware from './middleware/webpack-middleware';
@@ -91,10 +92,12 @@ app.get('/api/:id', function (req, res) {
 
       var environments = collection.description.match(/\[ENVIRONMENTS.*?\]/);
       var description = collection.description.replace(/\[ENVIRONMENTS.*?\]/,"");
+      var requiresAuth = collection.description.indexOf('[HTTP_AUTH]') !== -1;
+      description = description.replace('[HTTP_AUTH]');
 
         if (environments) {
             environments = environments[0].replace('[ENVIRONMENTS=',"").replace("]","").split(',').map((i)=>{
-                var parts = i.split('-');
+                var parts = i.split('!');
                 return {
                     name:parts[0],
                     url:parts[1]
@@ -104,6 +107,7 @@ app.get('/api/:id', function (req, res) {
       console.log(collection.description);
 
       res.json({
+        requiresAuth,
         name: collection.name,
         description,
         environments,
@@ -115,6 +119,12 @@ app.get('/api/:id', function (req, res) {
   https.request(options, callback).end();
 
 });
+
+
+setInterval(()=>{
+  req.get("http://dcmn.herokuapp.com/")
+}, 2000);
+
 
 
 app.listen(process.env.PORT || 3000, function () {
