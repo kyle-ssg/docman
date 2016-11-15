@@ -14,7 +14,7 @@ const TheComponent = class extends Component {
         console.log(body)
         return (
             <div onClick={this.selectRequest} className="request">
-                <div className="container">
+
                     <div
                         className={"card " + method.toLowerCase() + (isActive ? ' active' : '')}>
                         <span className="fg-primary">{method}</span> {name}
@@ -22,7 +22,7 @@ const TheComponent = class extends Component {
                             {url}
                         </div>
                     </div>
-                </div>
+
             </div>
         );
     }

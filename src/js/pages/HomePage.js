@@ -76,10 +76,10 @@ module.exports = class extends React.Component {
                             )}
                             {folders && folders.map((folder) => (
                                 <div id={folder.id} className="collection">
-                                    <div className="container">
+
                                         <h2>{folder.name}</h2>
                                         <p>{folder.description}</p>
-                                    </div>
+
                                     {folder.requests.map((request)=>
                                         <RequestSummary
                                             generateURL={this.generateURL}

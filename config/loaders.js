@@ -1,12 +1,12 @@
 module.exports = [
     {
         test: /\.css$/,
-        loaders: ['style', 'css']
+        loaders: ['style-loader', 'css-loader']
     },
     {
         test: /\.js?/,
         exclude: /node_modules/,
-        loaders: ['babel']
+        loaders: ['babel-loader']
     },
     {
         test: /\.html$/,
@@ -15,8 +15,8 @@ module.exports = [
     {
         test: /\.(jpe?g|png|gif|svg|mp4|webm)$/i,
         loaders: [
-            'file?hash=sha512&digest=hex&name=[hash].[ext]',
-            'image-webpack'
+            'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+            'image-webpack-loader'
         ]
     }
 ];
