@@ -47,33 +47,37 @@ module.exports = class extends React.Component {
         var { requiresAuth, folders, name, isLoading, environments, description, selectedRequest } = this.state;
         return (
             <div>
-                <div className="left">
+                <div>
                     {isLoading ? '...' : (
                         <div>
-                            <h1>
-                                {name}
+                            <div className="main-header">
+                                <h1>
+                                    {name}
+
+                                </h1>
                                 {environments &&
-                                <select className="select-large" onChange={this.setEnvironment}>
+                                <select className="form-control select-large" onChange={this.setEnvironment}>
                                     {environments.map((en, i)=>(
                                         <option value={i}>{en.name}</option>
                                     ))}
                                 </select>
                                 }
-                            </h1>
-
-
-                            <p className="lead">
-                                {description} <a target="_blank"
-                                                 href={"https://www.getpostman.com/collections/" + this.props.params.id}>Download</a>
-                            </p>
-                            {requiresAuth && (
-                                <div>
-                                    <h3>
-                                        This API Requires authentication, please enter a Bearer token here
-                                    </h3>
-                                    <input onChange={(e)=>this.setState({token:e.currentTarget.value})} type="text" placeholder="Token"/>
-                                </div>
-                            )}
+                            </div>
+                            <div className="left">
+                            <div className="intro">
+                                <p className="lead">
+                                    {description} <a target="_blank"
+                                                     href={"https://www.getpostman.com/collections/" + this.props.params.id}>Download</a>
+                                </p>
+                                {requiresAuth && (
+                                    <div>
+                                        <h3>
+                                            This API Requires authentication, please enter a Bearer token here
+                                        </h3>
+                                        <input onChange={(e)=>this.setState({token:e.currentTarget.value})} type="text" placeholder="Token"/>
+                                    </div>
+                                )}
+                            </div>
                             {folders && folders.map((folder) => (
                                 <div id={folder.id} className="collection">
 
@@ -90,6 +94,7 @@ module.exports = class extends React.Component {
                                 </div>
                             ))}
                         </div>
+                            </div>
                     )}
                 </div>
                 <div className="right console">
