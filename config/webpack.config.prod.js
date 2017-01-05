@@ -77,7 +77,7 @@ module.exports = {
         loaders: require('./loaders').concat([
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css!sass' })
+                loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css-loader!sass-loader' })
             }
         ])
     }
