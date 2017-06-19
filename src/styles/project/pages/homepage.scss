@@ -3,12 +3,22 @@
 }
 
 .main-header {
-    background-color: #FBFBFB;
+    position: fixed;
+    background-color: #191b25;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    height: 44px;
+    line-height: 44px;
     h1 {
         margin-top: 0;
         margin-bottom: 0;
         margin-left: 10px;
         border-bottom: 0px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 200;
     }
 }
 

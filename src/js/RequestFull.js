@@ -71,6 +71,11 @@ const TheComponent = class extends Component {
     }
 
 
+    getCurl = (e) => {
+
+    }
+
+
     sendRequest = (e) => {
         e.preventDefault();
         var { method } = this.props.request;
