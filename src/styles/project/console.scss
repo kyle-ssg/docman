@@ -2,7 +2,12 @@
   .tabs {
     button, button:active {
       outline: none;
-      background: transparent;
+      background: $colour-console-bg-alt;
+      &:hover {
+        background: $colour-console-bg-alt;
+
+      }
+
       border: none;
       color: $colour-console-fg;
     }
@@ -11,9 +16,9 @@
   color: $colour-console-fg;
   font-family: "Courier New";
   h1,h2,h3 {
-    color: #eae7e7;
+    color: $colour-console-fg;
     font-weight: 200;
-    border-bottom: 1px solid #8c8c8c;
+    border-bottom: 1px solid $colour-console-border;
   }
   h4 {
     color: $colour-brand;
@@ -31,18 +36,21 @@
 
   .cm-s-base16-dark.CodeMirror {
     .CodeMirror-code {
-      background: #272c3e;
+      background: $colour-console-bg-alt;
     }
     height: 210px;
     background: transparent;
     .CodeMirror-gutters {
       background: transparent;
     }
+    span {
+      color: $colour-console-fg;
+    }
     span.cm-string {
-      color: #59acff;
+      color: $colour-console-string;
     }
     span.cm-property {
-      color: #a6e22e;
+      color: $colour-console-property;
     }
   }
 }

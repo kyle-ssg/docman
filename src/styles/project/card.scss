@@ -16,10 +16,10 @@
   }
   border-left: 4px solid $colour-brand;
   &.get {
-    border-left: 4px solid $colour-brand-secondary;
+    border-left: 4px solid $colour-brand-third;
   }
   &.delete {
-    border-left: 4px solid $colour-brand-third;
+    border-left: 4px solid $colour-brand-secondary;
   }
   margin-bottom: 20px;
   padding: 10px;

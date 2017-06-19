@@ -29,7 +29,7 @@
   padding: 10px;
   margin-bottom: 44px;
   form {
-    background: darken($colour-console-bg,5);
+    background: $colour-console-bg;
     position: fixed;
     bottom:0;
     width: 650px;
@@ -41,10 +41,18 @@
 .left {
   top: 44px;
   padding: 10px;
-  background: #fafafa;
+  background: $body-bg;
   position: absolute;
   left: 0;
   right: 650px;
+  input {
+    border-radius: 4px;
+    height: 34px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 2px solid $colour-brand-secondary;
+    outline: none;
+  }
 }
 
 .fixed-bottom {
@@ -60,11 +68,35 @@
 
 .select-large {
   min-width: 200px;
+  background: $colour-console-bg;
   //font-size: 24px;
   position: absolute;
   right: 10px;
-  background-color: white;
   border: none;
+  padding-left: 10px;
+  padding-right: 10px;
   height: 30px;
   top:6px;
+}
+
+
+.main-header {
+border-bottom: 3px solid $colour-brand-secondary;
+  position: fixed;
+  background-color: $colour-nav-bg;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: 44px;
+  line-height: 44px;
+  h1 {
+    color:$colour-nav-fg;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 10px;
+    border-bottom: 0px;
+    font-size: 20px;
+    font-weight: 200;
+  }
 }
