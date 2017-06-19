@@ -3,7 +3,7 @@ import _ from 'lodash';
 const TheComponent = class extends Component {
     displayName: 'TheComponent'
 
-    selectRequest = () => {
+    selectRequest = (e) => {
         this.props.onClick(this.props.request);
     }
 
@@ -11,9 +11,8 @@ const TheComponent = class extends Component {
         var { method, name, url, body } = this.props.request;
         var { isActive } = this.props;
         body = body && JSON.parse(body);
-        console.log(body)
         return (
-            <div onClick={this.selectRequest} className="request">
+            <div id={this.props.id} href={"#"+this.props.id} onClick={this.selectRequest} className="request">
 
                     <div
                         className={"card " + method.toLowerCase() + (isActive ? ' active' : '')}>

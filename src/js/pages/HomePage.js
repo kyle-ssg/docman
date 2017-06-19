@@ -3,20 +3,30 @@ import RequestFull from '../RequestFull';
 import RequestSummary from '../RequestSummary';
 import sampleJSON from '../sample';
 module.exports = class extends React.Component {
-    constructor (props, context) {
+    constructor(props, context) {
         super(props, context);
-        this.state = { route: 'login', isLoading: true };
+        const environmentIndex = this.props.location.query.env && parseInt(this.props.location.query.env) || 0;
+        this.state = {
+            route: 'login',
+            environmentIndex,
+            isLoading: true
+        };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         if (this.props.params.id) {
             fetch('/api/' + (this.props.params.id))
-                .then((res)=>res.json())
-                .then((res)=> {
+                .then((res) => res.json())
+                .then((res) => {
                     this.setState(Object.assign({}, {
                         isLoading: false,
-                        selectedRequest: res.folders[0].requests[0]
-                    }, res));
+                        selectedRequest: res.folders[0].requests[0],
+                        environment: res.environments[this.state.environmentIndex],
+                    }, res), function () {
+                        if (document.location.hash) {
+                            $("html, body").animate({ scrollTop: $(document.location.hash).offset().top }, 1000);
+                        }
+                    });
                 })
         } else {
             this.setState(Object.assign({}, {
@@ -39,63 +49,64 @@ module.exports = class extends React.Component {
 
     setEnvironment = (e) => {
         this.setState({
-            environment: this.state.environments[parseInt(e.currentTarget.value)]
+            environment: this.state.environments[parseInt(e.currentTarget.value)],
+            environmentIndex: parseInt(e.currentTarget.value)
         })
     };
 
-    render () {
+    render() {
         var { requiresAuth, folders, name, isLoading, environments, description, selectedRequest } = this.state;
         return (
             <div>
                 <div>
                     {isLoading ? '...' : (
-                        <div>
-                            <div className="main-header">
-                                <h1>
-                                    {name}
+                            <div>
+                                <div className="main-header">
+                                    <h1>
+                                        {name}
 
-                                </h1>
-                                {environments &&
-                                <select className="form-control select-large" onChange={this.setEnvironment}>
-                                    {environments.map((en, i)=>(
-                                        <option value={i}>{en.name}</option>
-                                    ))}
-                                </select>
-                                }
-                            </div>
-                            <div className="left">
-                            <div className="intro">
-                                <p className="lead">
-                                    {description} <a target="_blank"
-                                                     href={"https://www.getpostman.com/collections/" + this.props.params.id}>Download</a>
-                                </p>
-                                {requiresAuth && (
-                                    <div>
-                                        <h3>
-                                            This API Requires authentication, please enter a Bearer token here
-                                        </h3>
-                                        <input onChange={(e)=>this.setState({token:e.currentTarget.value})} type="text" placeholder="Token"/>
-                                    </div>
-                                )}
-                            </div>
-                            {folders && folders.map((folder) => (
-                                <div id={folder.id} className="collection">
-
-                                        <h2>{folder.name}</h2>
-                                        <p>{folder.description}</p>
-
-                                    {folder.requests.map((request)=>
-                                        <RequestSummary
-                                            generateURL={this.generateURL}
-                                            onClick={this.selectRequest}
-                                            request={Object.assign({}, request, { url: this.generateURL(request.url) })}
-                                            isActive={selectedRequest == request}/>
-                                    )}
+                                    </h1>
+                                    {environments &&
+                                    <select value={this.state.environmentIndex} className="form-control select-large"
+                                            onChange={this.setEnvironment}>
+                                        {environments.map((en, i) => (
+                                            <option value={i}>{en.name}</option>
+                                        ))}
+                                    </select>
+                                    }
                                 </div>
-                            ))}
-                        </div>
+                                <div className="left">
+                                    <div className="intro">
+                                        <p className="lead">
+                                            {description} <a target="_blank"
+                                                             href={"https://www.getpostman.com/collections/" + this.props.params.id}><span className="fa fa-download"></span></a>
+                                        </p>
+                                        {requiresAuth && (
+                                            <div>
+                                                <input onChange={(e) => this.setState({ token: e.currentTarget.value })}
+                                                       type="text" placeholder="Bearer Token"/>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {folders && folders.map((folder) => (
+                                        <div id={folder.id} className="collection">
+
+                                            <h2>{folder.name}</h2>
+                                            <p>{folder.description}</p>
+
+                                            {folder.requests.map((request, i) =>
+                                                <RequestSummary
+                                                    id={folder.name+'_'+'_'+request.name+'_'+request.method}
+                                                    generateURL={this.generateURL}
+                                                    onClick={this.selectRequest}
+                                                    request={Object.assign({}, request, { url: this.generateURL(request.url) })}
+                                                    isActive={selectedRequest == request}/>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                    )}
+                        )}
                 </div>
                 <div className="right console">
                     {selectedRequest && (
