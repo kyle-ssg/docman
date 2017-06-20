@@ -11,4 +11,5 @@ module.exports = (url, options) => {
     }
 
     curl += ` '${url}'`;
+    return curl;
 }

@@ -78,7 +78,7 @@ module.exports = class extends React.Component {
                                 <div className="left">
                                     <div className="intro">
                                         <p className="lead">
-                                            {description} <a target="_blank"
+                                            {description || "Download Postman Collection"} <a alt="Download" target="_blank"
                                                              href={"https://www.getpostman.com/collections/" + this.props.params.id}><span className="fa fa-download"></span></a>
                                         </p>
                                         {requiresAuth && (

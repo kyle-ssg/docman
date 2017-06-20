@@ -2,11 +2,12 @@ import React, {Component, PropTypes} from 'react';
 import Tabs from './Tabs';
 import Button from './Button';
 import JSONText from './JSONText';
-
+import objectToCurl from './utils/object-to-curl';
+var Clipboard = require('clipboard');
 const TheComponent = class extends Component {
     displayName: 'TheComponent'
 
-    constructor (props, context) {
+    constructor(props, context) {
         super(props, context);
         this.headersEditor = null;
         this.editor = null;
@@ -23,11 +24,12 @@ const TheComponent = class extends Component {
         this.resetEditors();
     };
 
-    componentDidMount () {
+    componentDidMount() {
+        new Clipboard('.btn-copy');
         this.resetEditors();
     }
 
-    selectTab = (tab)=> {
+    selectTab = (tab) => {
         this.setState({ tab });
     };
 
@@ -47,8 +49,8 @@ const TheComponent = class extends Component {
             lint: true,
             theme: 'base16-dark',
         };
-        _.defer(()=> {
-
+        _.defer(() => {
+            //Headers editor
             if (this.headersEditor) {
                 this.editor.setValue(this.state.headersString)
                 this.headersEditor.refresh();
@@ -57,6 +59,27 @@ const TheComponent = class extends Component {
                     this.headersEditor = CodeMirror.fromTextArea(this.refs.headers, config)
                 }
             }
+            //cURL editor
+            if (this.curlEditor) {
+                this.editor.setValue(this.getCurl())
+
+                this.curlEditor.refresh();
+            } else {
+                if (this.refs.curl) {
+                    this.curlEditor = CodeMirror.fromTextArea(this.refs.curl, Object.assign({}, config, { mode: 'shell' }))
+                }
+            }
+            //Fetch editor
+            if (this.fetchEditor) {
+                this.editor.setValue(this.getFetch())
+
+                this.fetchEditor.refresh();
+            } else {
+                if (this.refs.fetch) {
+                    this.fetchEditor = CodeMirror.fromTextArea(this.refs.fetch, Object.assign({}, config, { mode: 'text/javascript' }))
+                }
+            }
+            //Editor
             if (this.editor) {
                 this.editor.setValue(this.state.bodyString)
                 this.editor.refresh();
@@ -71,9 +94,27 @@ const TheComponent = class extends Component {
     }
 
 
-    getCurl = (e) => {
+    getCurl = () => {
+        var { method } = this.props.request;
+        var body = this.editor ? this.editor.getValue() : this.state.bodyString;
+        var headers = this.headersEditor ? this.headersEditor.getValue() : this.state.headersString;
 
-    }
+        return objectToCurl(this.state.url, {
+            method,
+            headers: this.props.token ? Object.assign(JSON.parse(headers), { authorization: 'Basic ' + this.props.token }) : JSON.parse(headers),
+            body: method == "GET" ? null : JSON.parse(body)
+        })
+    };
+
+    getFetch = () => {
+        var { method } = this.props.request;
+        var body = this.editor ? this.editor.getValue() : this.state.bodyString;
+        var headers = this.headersEditor ? this.headersEditor.getValue() : this.state.headersString;
+
+        headers = this.props.token ? Object.assign(JSON.parse(headers), { authorization: 'Basic ' + this.props.token }) : JSON.parse(headers)
+
+        return `fetch('${this.state.url}', {\n  method:'${method}',\n  headers: ${JSON.stringify(headers, null, 2)},\n  body: ${body}\n})`;
+    };
 
 
     sendRequest = (e) => {
@@ -94,28 +135,28 @@ const TheComponent = class extends Component {
             method,
             headers: this.props.token ? Object.assign(JSON.parse(headers), { authorization: 'Basic ' + this.props.token }) : JSON.parse(headers),
             body: method == "GET" ? null : body
-        }).then((response)=> {
+        }).then((response) => {
 
             if (response.status >= 200 && response.status < 300) {
-                response.text().then((text)=>this.setState({
+                response.text().then((text) => this.setState({
                     endTime: new Date(),
                     error: "",
                     response: text,
                     isLoading: false
                 }))
             } else {
-                response.text().then((text)=>this.setState({
+                response.text().then((text) => this.setState({
                     endTime: new Date(),
                     error: text && text.trim(/\n/),
                     isLoading: false
                 }))
             }
-        }).catch((result)=> {
+        }).catch((result) => {
             this.setState({ isLoading: false, endTime: new Date(), result: result || 'Unauthorized' })
         })
     };
 
-    componentWillReceiveProps (newProps) {
+    componentWillReceiveProps(newProps) {
         if (newProps.request !== this.props.request) {
             this.setState({
                 error: "",
@@ -130,7 +171,7 @@ const TheComponent = class extends Component {
     }
 
 
-    render () {
+    render() {
         var { headers, method, body, url } = this.props.request;
         var duration = this.state.startTime && this.state.endTime && this.state.endTime.valueOf() - this.state.startTime.valueOf() + 'ms';
         return (
@@ -147,6 +188,44 @@ const TheComponent = class extends Component {
 
                         <div tabLabel={"Headers"}>
                             <textarea value={this.state.headersString} ref="headers"/>
+                        </div>
+
+                        <div tabLabel={"cURL"}>
+                            <div>
+                                <textarea value={this.getCurl()} ref="curl"/>
+                                <button
+                                    style={{ width: 200, marginTop:10, float: 'right' }}
+                                    onClick={() => {
+                                        this.setState({ copied: true })
+                                        setTimeout(() => {
+                                            this.setState({ copied: false })
+                                        }, 2000)
+                                    }}
+                                    className="btn-copy"
+                                    data-clipboard-text={this.getCurl()}>
+                                    {this.state.copied ? 'Copied!' : 'Copy to clipboard'}
+                                </button>
+
+                            </div>
+                        </div>
+
+                        <div tabLabel={"Fetch"}>
+                            <div>
+                                <textarea value={this.getFetch()} ref="fetch"/>
+                                <button
+                                    style={{ width: 200, marginTop:10, float: 'right' }}
+                                    onClick={() => {
+                                        this.setState({ copied: true })
+                                        setTimeout(() => {
+                                            this.setState({ copied: false })
+                                        }, 2000)
+                                    }}
+                                    className="btn-copy"
+                                    data-clipboard-text={this.getFetch()}>
+                                    {this.state.copied ? 'Copied!' : 'Copy to clipboard'}
+                                </button>
+
+                            </div>
                         </div>
 
                     </Tabs>
@@ -177,7 +256,7 @@ const TheComponent = class extends Component {
                             </div>
                             <input type="text" className="url flex-1 flex-column" placeholder="url"
                                    value={this.state.url}
-                                   onChange={(e)=>this.setState({ url: e.currentTarget.value })}
+                                   onChange={(e) => this.setState({ url: e.currentTarget.value })}
                             />
 
                             <div className="text-right flex-column">

@@ -25,6 +25,7 @@
     "babel-preset-stage-2": "6.13.0",
     "bootstrap": "4.0.0-alpha.3",
     "clean-webpack-plugin": "0.1.10",
+    "clipboard": "1.7.1",
     "compass-mixins": "0.12.10",
     "copy-webpack-plugin": "3.0.1",
     "cors": "2.8.1",
